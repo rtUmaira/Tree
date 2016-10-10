@@ -73,20 +73,20 @@ function myTreeInit() {
 
 myTreeInit();
 
-$('#myTree').on('selected.fu.tree', function (e, selected) {
-	console.log('Select Event: ', selected);
-	console.log($('#myTree').tree('selectedItems'));
-});
-
-// $('#myTree').on('updated.fu.tree', function (e, selected) {
-// 	console.log('Updated Event: ', selected);
+// $('#myTree').on('selected.fu.tree', function (e, selected) {
+// 	console.log('Select Event: ', selected);
 // 	console.log($('#myTree').tree('selectedItems'));
 // });
 
-$('#myTree').on('loaded.fu.tree', function (e) {
-	console.log('Loaded');
+$('#myTree').on('disclosedFolder.fu.tree', function (e, selected) {
+	// console.log('disclosed Event: ', selected);
 	console.log('e', e);
 });
+
+// $('#myTree').on('loaded.fu.tree', function (e) {
+// 	console.log('Loaded');
+// 	console.log('e', e);
+// });
 
 // $('#myTree').on('closed.fu.tree', function (e, info) {
 // 	console.log('Close Event: ', info);
