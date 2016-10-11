@@ -1,93 +1,48 @@
-function myTreeInit() {
-	$('#myTree').tree({
-		dataSource: function (options, callback) {
-			setTimeout(function () {
-				callback({
-					data: [
-						{
-							name: 'Ascending and Descending',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder1'
-							}
-						},
-						{
-							name: 'Sky and Water I (with custom icon)',
-							type: 'item',
-							dataAttributes: {
-								id: 'item1',
-								'data-icon': 'glyphicon glyphicon-file'
-							}
-						},
-						{
-							name: 'Drawing Hands',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder2'
-							}
-						},
-						{
-							name: 'Waterfall',
-							type: 'item',
-							dataAttributes: {
-								id: 'item2'
-							}
-						},
-						{
-							name: 'Belvedere',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder3'
-							}
-						},
-						{
-							name: 'Relativity (with custom icon)',
-							type: 'item',
-							dataAttributes: {
-								id: 'item3',
-								'data-icon': 'glyphicon glyphicon-picture'
-							}
-						},
-						{
-							name: 'House of Stairs',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder4'
-							}
-						},
-						{
-							name: 'Convex and Concave',
-							type: 'item',
-							dataAttributes: {
-								id: 'item4'
-							}
-						}
-					]
-				});
-			}, 400);
-		},
-		folderSelect: true
-	});
+	$('#myTree').tree();
 
-}
+	function toggle(element) {
+		var img_id = $(element).closest("li")[0].children[0].children[1].id;
+		$("#"+img_id).toggle();
+	}
 
-myTreeInit();
+	function sort(element) {
 
-// $('#myTree').on('selected.fu.tree', function (e, selected) {
-// 	console.log('Select Event: ', selected);
-// 	console.log($('#myTree').tree('selectedItems'));
-// });
+		var id = $(element).closest("li")[0].children[1].id;
+		$('#'+id).toggleClass('checked');
 
-$('#myTree').on('disclosedFolder.fu.tree', function (e, selected) {
-	// console.log('disclosed Event: ', selected);
-	console.log('e', e);
-});
+		var items = $('#'+id+ ' li').get();
+		console.log($(items[0]).text().first());
+		items.sort(function(a,b) {
+			// if a's or b's id includes folder then only get text of first child
+			// if (a.id.indexOf("folder") === "0")
+			// {
 
-// $('#myTree').on('loaded.fu.tree', function (e) {
-// 	console.log('Loaded');
-// 	console.log('e', e);
-// });
+			// }
+			// if (b.id.indexOf("folder") ==== "0")
+			// {
 
-// $('#myTree').on('closed.fu.tree', function (e, info) {
-// 	console.log('Close Event: ', info);
+			// }
+		  	var keyA = $(a).text();
+		  	var keyB = $(b).text();
+		  	if (keyA < keyB) return -1;
+		  	if (keyA > keyB) return 1;
+		  	return 0;
+		});
+		var ul = $('#'+id);
+
+		if (! $('#'+id).hasClass("checked") ) {		
+			items.reverse();
+		} 
+
+		$.each(items, function(i, li){
+		  ul.append(li);
+		});
+	}
+
+// $(document).ready(function () {
+// 	$('.tree-branch-children li:lt(3)').show();
+//     $('#loadMore').click(function () {
+//         $('.tree-branch-children li:lt(5)').show();
+//     });
+
 // });
