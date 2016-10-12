@@ -1,93 +1,98 @@
-function myTreeInit() {
-	$('#myTree').tree({
-		dataSource: function (options, callback) {
-			setTimeout(function () {
-				callback({
-					data: [
-						{
-							name: 'Ascending and Descending',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder1'
-							}
-						},
-						{
-							name: 'Sky and Water I (with custom icon)',
-							type: 'item',
-							dataAttributes: {
-								id: 'item1',
-								'data-icon': 'glyphicon glyphicon-file'
-							}
-						},
-						{
-							name: 'Drawing Hands',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder2'
-							}
-						},
-						{
-							name: 'Waterfall',
-							type: 'item',
-							dataAttributes: {
-								id: 'item2'
-							}
-						},
-						{
-							name: 'Belvedere',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder3'
-							}
-						},
-						{
-							name: 'Relativity (with custom icon)',
-							type: 'item',
-							dataAttributes: {
-								id: 'item3',
-								'data-icon': 'glyphicon glyphicon-picture'
-							}
-						},
-						{
-							name: 'House of Stairs',
-							type: 'folder',
-							dataAttributes: {
-								id: 'folder4'
-							}
-						},
-						{
-							name: 'Convex and Concave',
-							type: 'item',
-							dataAttributes: {
-								id: 'item4'
-							}
-						}
-					]
-				});
-			}, 400);
-		},
-		folderSelect: true
-	});
+	//$(document).ready(function () {
+	    
+	// });
 
-}
+	$('#myTree').tree();
 
-myTreeInit();
+	function toggle(element) {
+		var folder = $(element).closest("li")[0];
+		// find the folder's concerned img 
+		var img_id = folder.children[0].children[1].id;
+		$("#"+img_id).toggle();
 
-// $('#myTree').on('selected.fu.tree', function (e, selected) {
-// 	console.log('Select Event: ', selected);
-// 	console.log($('#myTree').tree('selectedItems'));
-// });
+		// find the folder's concerned load more
+		var load_id = folder.children[2].id;
+		$("#"+load_id).toggle();
 
-$('#myTree').on('disclosedFolder.fu.tree', function (e, selected) {
-	// console.log('disclosed Event: ', selected);
-	console.log('e', e);
-});
+		// view folder's contents
+		var ul_id = $(element).closest("li")[0].children[1].id;
+		// console.log('id', ul_id);
 
-// $('#myTree').on('loaded.fu.tree', function (e) {
-// 	console.log('Loaded');
-// 	console.log('e', e);
-// });
+		var size_li = $("#"+ul_id).children("li").size();
+		//console.log('size: ', size_li);
+	    x = 3;
+	    $("#"+ul_id).children(" li:lt("+x+")").show();
+	    $('#'+load_id).click(function () {
+	        x = (x+3 <= size_li) ? x+3 : size_li;
+	        // console.log('x: ', x);
+	        $("#"+ul_id).children(" li:lt("+x+")").show();
+	    });
+	}
 
-// $('#myTree').on('closed.fu.tree', function (e, info) {
-// 	console.log('Close Event: ', info);
-// });
+	function sort(element) {
+		// get children of branch
+		var id = $(element).closest("li")[0].children[1].id;
+		console.log('id', id);
+
+		$('#'+id).toggleClass('checked');
+
+		var items = $(element).closest("li").children("ul").children("li");
+		// console.log(items[1].id.indexOf("folder"));
+		
+		items.sort(function(a,b){
+			var keyA;
+			var keyB;
+			// console.log('a: ', a);
+			// console.log('b: ', b);
+			if (a.id.indexOf("folder") == "0"  && b.id.indexOf("folder") == "0")	
+			{
+				//console.log('1');
+				keyA = $(a.children[0].children[0].children[2]).text().trim();
+			  	keyB = $(b.children[0].children[0].children[2]).text().trim();
+			} else if (a.id.indexOf("folder") == "-1" && b.id.indexOf("folder") == "0") 
+			{
+				//console.log('2');
+				keyA = $(a).text().trim();
+			  	keyB = $(b.children[0].children[0].children[2]).text().trim();
+			} else if (a.id.indexOf("folder") == "0" && b.id.indexOf("folder") == "-1") 
+			{
+				//console.log('3');
+				keyA = $(a.children[0].children[0].children[2]).text().trim();
+			  	keyB = $(b).text().trim();
+			} else {
+				//console.log('4');
+				keyA = $(a).text().trim();
+			  	keyB = $(b).text().trim();
+			}
+			// console.log ('keyA: ', keyA);
+			// console.log('keyB: ', keyB);
+			keyA = keyA.toUpperCase();
+			keyB = keyB.toUpperCase();
+
+			//console.log('-----------------------');
+		  	if (keyA < keyB) {
+		  		//console.log('-1');
+		  		if ( !$('#'+id).hasClass("checked") ) {	
+		  			return 1;
+		  		} else {
+		  			return -11
+		  		}
+		  	}
+		  	if (keyA > keyB) {
+		  		//console.log('1');
+		  		if ( !$('#'+id).hasClass("checked") ) {	
+		  			return -1;
+		  		} else {
+		  			return 1
+		  		}
+		  	}
+		  	return 0;
+		});
+
+
+		var ul = $('#'+id);
+		$.each(items, function(i, li){
+		  ul.append(li);
+		});
+	}
+
