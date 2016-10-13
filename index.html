@@ -1,103 +1,166 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-        <link href="//www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css" rel="stylesheet">
-        <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="//www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>
-
-        <style>
-        	.tree-item{
-        		display: none;
-        	}
-        </style>
-    </head>
-    <body class="fuelux">
-        <div class="form-group">
-            <ul class="tree" role="tree" id="myTree">
-                <li class="tree-branch" role="treeitem" aria-expanded="false" id="folder1" aria-labelledby="folder1-label">
-                    <div class="tree-branch-header">
-                        <button  onclick="toggle(this)" type="button" class="tree-branch-name">
+	<head> 	  
+	  	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="//www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css" rel="stylesheet">
+	  	<link rel="stylesheet" href="css/style.css">
+	    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+	    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	    <script src="//www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>
+	</head>
+	<body class="fuelux">
+	    <div class="form-group">
+	        <ul class="tree" role="tree" id="myTree">
+	        	 <li class="tree-branch" role="treeitem" aria-expanded="false" id="folder2" aria-labelledby="folder2-label">
+	                <div class="tree-branch-header">
+	                    <button  onclick="toggle(this)" type="button" class="tree-branch-name">
 	                        <span class="glyphicon icon-caret glyphicon-play"></span>
 	                        <span class="glyphicon icon-folder glyphicon-folder-close"></span>
-	                        <span class="tree-label" id="folder1-label">Ascending and Descending</span>
-                        </button>
-						<img style="display:none" onclick="sort(this);" id = "img1" src="http://downloadicons.net/sites/default/files/in-ascending-alphabetical-sort-icon-64957.png"  height="20px" width="20px"/>
-                    </div>
-                    <ul class="tree-branch-children hidden" role="group" id="c_f1">
-                    	<li class="tree-branch" role="treeitem" aria-expanded="false" id="folder2" aria-labelledby="folder2-label">
-						    <div class="tree-branch-header">
-						        <button onclick="toggle(this)" type="button" class="tree-branch-name">
-						        <span class="glyphicon icon-caret glyphicon-play"></span>
-						        <span class="glyphicon icon-folder glyphicon-folder-close"></span>
-						        <span class="tree-label" id="folder2-label"> Folder 2 </span>
-						        </button>
-        						<img style="display:none" onclick="sort(this);" id = "img2" src="http://downloadicons.net/sites/default/files/in-ascending-alphabetical-sort-icon-64957.png"  height="20px" width="20px"/>
-						    </div>
-						    <ul class="tree-branch-children hidden" role="group">
-						        <li class="tree-item" role="treeitem" id="item6" aria-labelledby="item6-label">
-						            <button type="button" class="tree-item-name">
-						            <span class="glyphicon icon-item fueluxicon-bullet"></span>
-						            <span class="tree-label">Item1 of folder 2</span>
-						            </button>
-						        </li>
-						        <li class="tree-branch" role="treeitem" aria-expanded="false" id="folder3" aria-labelledby="folder3-label">
-						            <div class="tree-branch-header">
-						                <button onclick="toggle(this)" type="button" class="tree-branch-name">
-						                <span class="glyphicon icon-caret glyphicon-play"></span>
-						                <span class="glyphicon icon-folder glyphicon-folder-close"></span>
-						                <span class="tree-label" id="folder1-label"> Folder 1 of Folder 2</span>
-						                </button>
-						                <img style="display:none" onclick="sort(this);" id = "img3" src="http://downloadicons.net/sites/default/files/in-ascending-alphabetical-sort-icon-64957.png"  height="20px" width="20px"/>
-						            </div>
-						            <ul class="tree-branch-children" role="group">                
-						            </ul>
-						        </li>
-						        <li class="tree-item" role="treeitem" id="item7" aria-labelledby="item7-label" data-icon="glyphicon glyphicon-file">
-						            <button type="button" class="tree-item-name">
-						            <span class="icon-item glyphicon glyphicon-file"></span>
-						            <span class="tree-label">Item 2 of Folder 2</span>
-						            </button>
-						        </li>
-						        <div id="loadMore">Load more</div>
-						    </ul>
-						</li>
-                        <li class="tree-item" role="treeitem" id="item1" aria-labelledby="item1-label">
-                            <button type="button" class="tree-item-name">
-                            <span class="icon-item glyphicon glyphicon-file"></span>
-                            <span class="tree-label">C</span>
-                            </button>
-                        </li>                      
-                        <li class="tree-item" role="treeitem" id="item2" aria-labelledby="item2-label" data-icon="glyphicon glyphicon-file">
-                            <button type="button" class="tree-item-name">
-                            <span class="icon-item glyphicon glyphicon-file"></span>
-                            <span class="tree-label">D</span>
-                            </button>
-                        </li>
-                        <li class="tree-item" role="treeitem" id="item3" aria-labelledby="item3-label" data-icon="glyphicon glyphicon-file">
-                            <button type="button" class="tree-item-name">
-                            <span class="icon-item glyphicon glyphicon-file"></span>
-                            <span class="tree-label">B</span>
-                            </button>
-                        </li>
-                        <li class="tree-item" role="treeitem" id="item4" aria-labelledby="item4-label" data-icon="glyphicon glyphicon-file">
-                            <button type="button" class="tree-item-name">
-                            <span class="icon-item glyphicon glyphicon-file"></span>
-                            <span class="tree-label">A</span>
-                            </button>
-                        </li>
-                        <li class="tree-item" role="treeitem" id="item5" aria-labelledby="item5-label" data-icon="glyphicon glyphicon-file">
-                            <button type="button" class="tree-item-name">
-                            <span class="icon-item glyphicon glyphicon-file"></span>
-                            <span class="tree-label">W</span>
-                            </button>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <script type="text/javascript" src = "script.js" > </script>
-    </body>
+	                        <span class="tree-label" id="folder2-label">Ascending and Descending</span>
+	                    </button>
+						<i  onclick="sort(this);" class="fa fa-sort-alpha-asc" aria-hidden="true" height="20px" width="20px"></i>
+	                </div>
+	                <ul class="tree-branch-children hidden" role="group" id = "c_f2">
+		                <li class="tree-branch" role="treeitem" aria-expanded="false" id="folder1" aria-labelledby="folder1-label">
+		                    <div class="tree-branch-header">
+		                        <button  onclick="toggle(this)" type="button" class="tree-branch-name">
+			                        <span class="glyphicon icon-caret glyphicon-play"></span>
+			                        <span class="glyphicon icon-folder glyphicon-folder-close"></span>
+			                        <span class="tree-label" id="folder1-label">Folder 2</span>
+		                        </button>
+								<i onclick="sort(this);"class="fa fa-sort-alpha-asc" aria-hidden="true" height="20px" width="20px"></i>
+		                    </div>
+		                    <ul class="tree-branch-children hidden" role="group" id = "c_f1">		                    	
+		                        <li class="tree-item" role="treeitem" id="item1" aria-labelledby="item1-label">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">item of folder 2</span>
+		                            </button>
+		                        </li> 
+		                        
+	                    <li class="tree-branch" role="treeitem" aria-expanded="false" id="folder3" aria-labelledby="folder3-label">
+		                    <div class="tree-branch-header">
+		                        <button  onclick="toggle(this)" type="button" class="tree-branch-name">
+			                        <span class="glyphicon icon-caret glyphicon-play"></span>
+			                        <span class="glyphicon icon-folder glyphicon-folder-close"></span>
+			                        <span class="tree-label" id="folder3-label">MMMM </span>
+		                        </button>
+								<i onclick="sort(this);" class="fa fa-sort-alpha-asc" aria-hidden="true" height="20px" width="20px"></i>
+		                    </div>
+		                    <ul class="tree-branch-children hidden" role="group" id = "c_f3">		                    	
+		                        <li class="tree-item" role="treeitem" id="item12" aria-labelledby="item12-label">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">item of folder 3</span>
+		                            </button>
+		                        </li> 
+		                         <li class="tree-item" role="treeitem" id="item13" aria-labelledby="item13-label">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">u</span>
+		                            </button>
+		                        </li>                      
+		                        <li class="tree-item" role="treeitem" id="item14" aria-labelledby="item14-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">D</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item15" aria-labelledby="item15-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">b</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item16" aria-labelledby="item16-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">A</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item17" aria-labelledby="item17-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">W</span>
+		                            </button>
+		                        </li>                     
+				                        
+		                    </ul>
+		                    <div style="display:none" id="loadMore3">Load more</div>
+
+		                </li>   
+		                         <li class="tree-item" role="treeitem" id="item2" aria-labelledby="item2-label">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">u</span>
+		                            </button>
+		                        </li>                      
+		                        <li class="tree-item" role="treeitem" id="item3" aria-labelledby="item3-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">D</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item4" aria-labelledby="item4-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">b</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item5" aria-labelledby="item5-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">A</span>
+		                            </button>
+		                        </li>
+		                        <li class="tree-item" role="treeitem" id="item6" aria-labelledby="item6-label" data-icon="glyphicon glyphicon-file">
+		                            <button type="button" class="tree-item-name">
+		                            <span class="icon-item glyphicon glyphicon-file"></span>
+		                            <span class="tree-label">W</span>
+		                            </button>
+		                        </li>                    
+		                        
+		                    </ul>
+
+		                    <div style="display:none" id="loadMore2">Load more</div>
+
+		                </li>                    	
+	                    <li class="tree-item" role="treeitem" id="item7" aria-labelledby="item7-label">
+	                        <button type="button" class="tree-item-name">
+	                        <span class="icon-item glyphicon glyphicon-file"></span>
+	                        <span class="tree-label">u</span>
+	                        </button>
+	                    </li>                      
+	                    <li class="tree-item" role="treeitem" id="item8" aria-labelledby="item8-label" data-icon="glyphicon glyphicon-file">
+	                        <button type="button" class="tree-item-name">
+	                        <span class="icon-item glyphicon glyphicon-file"></span>
+	                        <span class="tree-label">D</span>
+	                        </button>
+	                    </li>
+	                    <li class="tree-item" role="treeitem" id="item9" aria-labelledby="item9-label" data-icon="glyphicon glyphicon-file">
+	                        <button type="button" class="tree-item-name">
+	                        <span class="icon-item glyphicon glyphicon-file"></span>
+	                        <span class="tree-label">b</span>
+	                        </button>
+	                    </li>
+	                    <li class="tree-item" role="treeitem" id="item10" aria-labelledby="item10-label" data-icon="glyphicon glyphicon-file">
+	                        <button type="button" class="tree-item-name">
+	                        <span class="icon-item glyphicon glyphicon-file"></span>
+	                        <span class="tree-label">A</span>
+	                        </button>
+	                    </li>
+	                    <li class="tree-item" role="treeitem" id="item11" aria-labelledby="item11-label" data-icon="glyphicon glyphicon-file">
+	                        <button type="button" class="tree-item-name">
+	                        <span class="icon-item glyphicon glyphicon-file"></span>
+	                        <span class="tree-label">W</span>
+	                        </button>
+	                    </li>     
+	                </ul>
+
+	                <div style="display:none" id="loadMore1">Load more</div>
+
+	            </li> 
+	    <script type="text/javascript" src = "js/script.js" > </script>
+	</body>
 </html>
