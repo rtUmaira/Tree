@@ -7,32 +7,30 @@ var tree;
 		$('.tree-branch-name').click(function () {	    	
 	    	// console.log('this1', this);
 	    	var element = this;
-	    	var folder = $(element).closest("li")[0];
-		    // console.log('folder', folder);
-			// find the folder's concerned img 
-			var img = folder.children[0].children[1];
-			//console.log('img_id', img_id);
-			$(img).toggle();
-
-			// find the folder's concerned load more
-			var loadMore = folder.children[2];
-			//console.log('load_id', load_id);
-			$(loadMore).toggle();
-	    	// console.log('toggle');
+	    	
 			$(element).toggleClass("open");	    
 			// console.log('counter2: ', counter2);
 			if ( !$(element).hasClass("open") ) {	    	
 		    	// not expanded
 		    	console.log('close');
 		    	// console.log($(tree).children().html());	
-		   		// $('#myTree').replaceWith(tree);
-		   		//$('#myTree').tree('destroy');
-		   		// $('#myTree').tree('closeAll');
-		   		// $(loadMore).toggle();
-
+		   		//$('#myTree').replaceWith(tree);
+		   		// $('#myTree').tree('destroy');
+		   		// $('#myTree').tree();
 		    } else {
 		    	console.log('open');	    	
-		    	
+		    	var folder = $(element).closest("li")[0];
+			    // console.log('folder', folder);
+				// find the folder's concerned img 
+				var img = folder.children[0].children[1];
+				//console.log('img_id', img_id);
+				$(img).toggle();
+
+				// find the folder's concerned load more
+				var loadMore = folder.children[2];
+				//console.log('load_id', load_id);
+				$(loadMore).toggle();
+		    	// console.log('toggle');
 				if ( $(img).hasClass("fa fa-sort-alpha-asc") ) 
 		    	{	
 		    		var ul = folder.children[1];
