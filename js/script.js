@@ -3,50 +3,58 @@ var tree;
 	$(document).ready(function() {
 	    tree = $('#myTree').clone();
 		$('#myTree').tree();
-
+		// console.log($('.tree-branch-name'));
 		$('.tree-branch-name').click(function () {	    	
 	    	// console.log('this1', this);
 	    	var element = this;
+	    	var folder = $(element).closest("li")[0];
+		    // console.log('folder', folder);
+			// find the folder's concerned img 
+			var img = folder.children[0].children[1];
+			//console.log('img_id', img_id);
+			$(img).toggle();
 
+			// find the folder's concerned load more
+			var loadMore = folder.children[2];
+			//console.log('load_id', load_id);
+			$(loadMore).toggle();
 	    	// console.log('toggle');
 			$(element).toggleClass("open");	    
 			// console.log('counter2: ', counter2);
 			if ( !$(element).hasClass("open") ) {	    	
 		    	// not expanded
-		    	// console.log('---------');	
+		    	console.log('close');
 		    	// console.log($(tree).children().html());	
-		   		$('#myTree').replaceWith(tree);
+		   		// $('#myTree').replaceWith(tree);
+		   		//$('#myTree').tree('destroy');
+		   		// $('#myTree').tree('closeAll');
+		   		// $(loadMore).toggle();
+
 		    } else {
-		    	var folder = $(element).closest("li")[0];
-			    // console.log('folder', folder);
-				// find the folder's concerned img 
-				var img = folder.children[0].children[1];
-				//console.log('img_id', img_id);
-				$(img).toggle();
+		    	console.log('open');	    	
+		    	
+				if ( $(img).hasClass("fa fa-sort-alpha-asc") ) 
+		    	{	
+		    		var ul = folder.children[1];
+					// console.log('id', $('#'+ul_id).children() );
 
-				// find the folder's concerned load more
-				var loadMore = folder.children[2];
-				//console.log('load_id', load_id);
-
-				$(loadMore).toggle();
-
-				// view folder's contents
-				var ul = folder.children[1];
-				// console.log('id', $('#'+ul_id).children() );
-
-				var size_li = $(ul).children("li").size();
-				//console.log('size: ', size_li);
-			    var x = 3;
-			    $(ul).children(" li:lt("+x+")").css( "display", "block");
-			    $(ul).attr('class', 'tree-branch-children');
-			    var counter = 1;
+					var size_li = $(ul).children("li").size();
+					//console.log('size: ', size_li);
+				    var x = 3;
+				    $(ul).children(" li:lt("+x+")").css( "display", "block");
+				    $(ul).attr('class', 'tree-branch-children');
+		    	}				
 
 			    $(loadMore).click(function () {	    	
 			    	// counter++;
 			    	// console.log(counter);
 			        x = (x+3 <= size_li) ? x+3 : size_li;
 			        // console.log('x: ', x);
-			        $(ul).children(" li:lt("+x+")").css( "display", "block");	      
+			        $(ul).children(" li:lt("+x+")").css( "display", "block");
+			        if (x == size_li)
+			        {
+			        	$(loadMore).toggle();
+			        }	      
 			    	
 			    	if ( $(img).hasClass("fa fa-sort-alpha-desc") ) 
 			    	{	
@@ -55,6 +63,7 @@ var tree;
 			    });
 		    }
 	    });
+			
 
 	    $('.sort').click(function () {	    	
 	    	var element = this;
@@ -143,6 +152,7 @@ var tree;
 			  ul.append(li);
 			});
 
+			console.log('ul:', $(ul).children());
 	    });
 
 	});
