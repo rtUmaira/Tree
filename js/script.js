@@ -1,4 +1,4 @@
-	var tree;
+var tree;
 	// var counter2 = 1;
 	$(document).ready(function(){
 	    tree = $('#myTree').clone();
@@ -20,37 +20,37 @@
 	    	var folder = $(element).closest("li")[0];
 		    // console.log('folder', folder);
 			// find the folder's concerned img 
-			var img_id = folder.children[0].children[1];
+			var img = folder.children[0].children[1];
 			//console.log('img_id', img_id);
-			$(img_id).toggle();
+			$(img).toggle();
 
 			// find the folder's concerned load more
-			var load_id = folder.children[2].id;
+			var loadMore = folder.children[2];
 			//console.log('load_id', load_id);
 
-			$("#"+load_id).toggle();
+			$(loadMore).toggle();
 
 			// view folder's contents
-			var ul_id = folder.children[1].id;
+			var ul = folder.children[1];
 			// console.log('id', $('#'+ul_id).children() );
 
-			var size_li = $("#"+ul_id).children("li").size();
+			var size_li = $(ul).children("li").size();
 			//console.log('size: ', size_li);
 		    var x = 3;
-		    $("#"+ul_id).children(" li:lt("+x+")").css( "display", "block");
-		    $("#"+ul_id).attr('class', 'tree-branch-children');
+		    $(ul).children(" li:lt("+x+")").css( "display", "block");
+		    $(ul).attr('class', 'tree-branch-children');
 		    var counter = 1;
 
-		    $('#'+load_id).click(function () {	    	
+		    $(loadMore).click(function () {	    	
 		    	// counter++;
 		    	// console.log(counter);
 		        x = (x+3 <= size_li) ? x+3 : size_li;
 		        // console.log('x: ', x);
-		        $("#"+ul_id).children(" li:lt("+x+")").css( "display", "block");	      
+		        $(ul).children(" li:lt("+x+")").css( "display", "block");	      
 		    	
-		    	if ( $(img_id).hasClass("fa fa-sort-alpha-desc") ) 
+		    	if ( $(img).hasClass("fa fa-sort-alpha-desc") ) 
 		    	{	
-		    		$(img_id).attr('class', "fa fa-sort-alpha-asc");
+		    		$(img).attr('class', "fa fa-sort-alpha-asc");
 		    	}
 		    });
 	    }
@@ -60,12 +60,12 @@
 		// get ul children of branch
 		var folder = $(element).closest("li")[0];
 
-		var img_id = folder.children[0].children[1];
-		if ( $(img_id).hasClass("fa fa-sort-alpha-asc") ) 
+		var img = folder.children[0].children[1];
+		if ( $(img).hasClass("fa fa-sort-alpha-asc") ) 
     	{	
-    		$(img_id).attr('class', "fa fa-sort-alpha-desc");
+    		$(img).attr('class', "fa fa-sort-alpha-desc");
     	} else {
-    		$(img_id).attr('class', "fa fa-sort-alpha-asc")
+    		$(img).attr('class', "fa fa-sort-alpha-asc")
     	}
 		// console.log(img_id);
 		// console.log(img_id);
@@ -77,30 +77,30 @@
 		for (var i = 0; i < children.length; i++) {
 		  	var child = children[i];
 		  	// console.log('child: ', child,  $('#' + child.id).css('display') );
-		  	if ( $('#'+child.id).css("display") === "block")
+		  	if ( $(child).css("display") === "block")
 		  	{
 		  		items.push(child);
 		  	}
 		}
-		// console.log(items[1].id.indexOf("folder"));
+		// console.log(items);
 		
 		
 		items.sort(function(a,b){
 			var keyA;
 			var keyB;
-			// console.log('a: ', a);
-			// console.log('b: ', b);
-			if (a.id.indexOf("folder") == "0"  && b.id.indexOf("folder") == "0")	
+			// console.log('a: ', a.className.includes("branch"));
+			// console.log('b: ', b.className.includes("item"));
+			if ( a.className.includes("branch") === "true"  &&  a.className.includes("branch") == "true")	
 			{
 				//console.log('1');
 				keyA = $(a.children[0].children[0].children[2]).text().trim();
 			  	keyB = $(b.children[0].children[0].children[2]).text().trim();
-			} else if (a.id.indexOf("folder") == "-1" && b.id.indexOf("folder") == "0") 
+			} else if ( a.className.includes("branch") === "false"  &&  a.className.includes("branch") == "true") 
 			{
 				//console.log('2');
 				keyA = $(a).text().trim();
 			  	keyB = $(b.children[0].children[0].children[2]).text().trim();
-			} else if (a.id.indexOf("folder") == "0" && b.id.indexOf("folder") == "-1") 
+			} else if ( a.className.includes("branch") === "true"  &&  a.className.includes("branch") == "false") 
 			{
 				//console.log('3');
 				keyA = $(a.children[0].children[0].children[2]).text().trim();
@@ -118,7 +118,7 @@
 			//console.log('-----------------------');
 		  	if (keyA < keyB) {
 		  		//console.log('-1');
-		  		if ( !$(img_id).hasClass("fa fa-sort-alpha-desc") ) {	
+		  		if ( !$(img).hasClass("fa fa-sort-alpha-desc") ) {	
 		  			return 1;
 		  		} else {
 		  			return -1
@@ -126,7 +126,7 @@
 		  	}
 		  	if (keyA > keyB) {
 		  		//console.log('1');
-		  		if ( !$(img_id).hasClass("fa fa-sort-alpha-desc") ) {	
+		  		if ( !$(img).hasClass("fa fa-sort-alpha-desc") ) {	
 		  			return -1;
 		  		} else {
 		  			return 1
