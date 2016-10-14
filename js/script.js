@@ -7,51 +7,66 @@ var tree;
 		$('.tree-branch-name').click(function () {	    	
 	    	// console.log('this1', this);
 	    	var element = this;
-	    	
+	    	var folder = $(element).closest("li")[0];
+		    // console.log('folder', folder);
+			// find the folder's concerned img 
+			var img = folder.children[0].children[1];
+			//console.log('img_id', img_id);
+			$(img).toggle();
+
+			// find the folder's concerned load more
+			var loadMore = folder.children[2];
+			//console.log('load_id', load_id);
 			$(element).toggleClass("open");	    
 			// console.log('counter2: ', counter2);
+			if ( !$(element).hasClass("kids") || $(element).hasClass("open")) {
+				// all kids not shown 
+				console.log	('xxxx');  
+		    	$(loadMore).toggle();
+		    	// console.log(element);
+		    }
+    		var ul = folder.children[1];
+			// console.log('id', $('#'+ul_id).children() );
+
+			var size_li = $(ul).children("li").size();
+
 			if ( !$(element).hasClass("open") ) {	    	
 		    	// not expanded
 		    	console.log('close');
-		    	// console.log($(tree).children().html());	
-		   		//$('#myTree').replaceWith(tree);
-		   		// $('#myTree').tree('destroy');
-		   		// $('#myTree').tree();
+		   		// set display of all children to none
+		   		$(ul).children("li").css( "display", "none");
+		   		$(element).toggleClass("kids"); 
+
+			    $(loadMore).css( "display", "none");
 		    } else {
-		    	console.log('open');	    	
-		    	var folder = $(element).closest("li")[0];
-			    // console.log('folder', folder);
-				// find the folder's concerned img 
-				var img = folder.children[0].children[1];
-				//console.log('img_id', img_id);
-				$(img).toggle();
+		    	console.log('open');  
+			    var x = 3;
+			    $(ul).children(" li:lt("+x+")").css( "display", "block");
+			    $(ul).attr('class', 'tree-branch-children');
 
-				// find the folder's concerned load more
-				var loadMore = folder.children[2];
-				//console.log('load_id', load_id);
-				$(loadMore).toggle();
-		    	// console.log('toggle');
-				if ( $(img).hasClass("fa fa-sort-alpha-asc") ) 
-		    	{	
-		    		var ul = folder.children[1];
-					// console.log('id', $('#'+ul_id).children() );
-
-					var size_li = $(ul).children("li").size();
-					//console.log('size: ', size_li);
-				    var x = 3;
-				    $(ul).children(" li:lt("+x+")").css( "display", "block");
-				    $(ul).attr('class', 'tree-branch-children');
-		    	}				
-
-			    $(loadMore).click(function () {	    	
-			    	// counter++;
-			    	// console.log(counter);
+			    $(loadMore).click(function () {	 
+			    	var count_kids = 0; 
 			        x = (x+3 <= size_li) ? x+3 : size_li;
 			        // console.log('x: ', x);
 			        $(ul).children(" li:lt("+x+")").css( "display", "block");
-			        if (x == size_li)
+			        var children = $(ul).children("li");
+
+			        // toggle load more  if more kids displayed.
+			        for (var i = 0; i < children.length; i++) {
+					  	var child = children[i];
+					  	// console.log('child: ', child,  $('#' + child.id).css('display') );
+					  	if ( $(child).css("display") === "block")
+					  	{
+					  		count_kids++;
+					  	}
+					}
+					console.log('count_kids', count_kids);
+			        if (count_kids == size_li)
 			        {
-			        	$(loadMore).toggle();
+			        	//console.log('please stahp');
+			        	$(loadMore).css( "display", "none");
+			        	$(element).toggleClass("kids"); 
+			        	count_kids = 0;
 			        }	      
 			    	
 			    	if ( $(img).hasClass("fa fa-sort-alpha-desc") ) 
@@ -59,6 +74,7 @@ var tree;
 			    		$(img).attr('class', "fa fa-sort-alpha-asc");
 			    	}
 			    });
+
 		    }
 	    });
 			
@@ -150,7 +166,7 @@ var tree;
 			  ul.append(li);
 			});
 
-			console.log('ul:', $(ul).children());
+			// console.log('ul:', $(ul).children());
 	    });
 
 	});
