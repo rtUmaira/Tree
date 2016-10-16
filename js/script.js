@@ -28,17 +28,8 @@ $(document).ready(function() {
 		if ( !$(folder).hasClass("tree-open") ) {	    	
 	    	// not expanded
 	    	console.log('close: ');
-	   		// if this current folder has more sub branches then close them
-	   		var sub_folders = $(ul).children(".tree-branch");	   		
-	   		for (var i = 0; i < sub_folders.length; i++) {
-			  	if ( $(sub_folders[i]).hasClass("tree-open") && !$(sub_folders[i]).children("ul").hasClass("hidden")  ) {
-			  		// if the branch was opened previously then show only first 3 children
-			  		$(sub_folders[i]).children("div").children(".sort").toggle();
-			  		$(sub_folders[i]).children(".loadMore").css("display", "none");
-			  		$(sub_folders[i]).children("ul").children("li").css( "display", "none");
-			  		$('#myTree').tree('closeFolder', $(sub_folders[i]).children("div") );			  		
-			  	}		  	
-			}
+	    	close_subFolders($(ul).children(".tree-branch"));
+	   		
 	   		$(ul).children("li .tree-item").css( "display", "none");
 	   		$(element).toggleClass("kids"); 
 	   		$(img).css( "display", "none");
@@ -181,3 +172,20 @@ $(document).ready(function() {
     });
 
 });
+
+
+function close_subFolders(sub_folders)
+{
+	// if this current folder has more sub branches then close them
+	for (var i = 0; i < sub_folders.length; i++) {
+	  	if ( $(sub_folders[i]).hasClass("tree-open") && !$(sub_folders[i]).children("ul").hasClass("hidden")  ) {
+	  		// if the branch was opened previously then show only first 3 children
+	  		$(sub_folders[i]).children("div").children(".sort").toggle();
+	  		$(sub_folders[i]).children(".loadMore").css("display", "none");
+	  		$(sub_folders[i]).children("ul").children("li").css( "display", "none");
+	  		$('#myTree').tree('closeFolder', $(sub_folders[i]).children("div") );
+	  		// check further
+	  		close_subFolders( $(sub_folders[i]).children("ul").children("li .tree-branch") );			  		
+	  	}		  	
+	}
+}
