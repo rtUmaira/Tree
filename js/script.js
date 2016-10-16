@@ -3,64 +3,58 @@ $(document).ready(function() {
 	$('#myTree').tree();
 	// console.log($('.tree-branch-name'));
 	$('.tree-branch-name').click(function () {	    	
-    	// console.log('this1', this);
+    	console.log('toggle');
     	var element = this;
-    	var folder = $(element).closest("li")[0];
-	    // console.log('folder', folder);
-		// find the folder's concerned img 
-		var img = folder.children[0].children[1];
-		//console.log('img_id', img_id);
 
-		// find the folder's concerned load more
-		var loadMore = folder.children[2];
-		//console.log('load_id', load_id);
-		$(element).toggleClass("open");	    
-		// console.log('counter2: ', counter2);
-		if ( !$(element).hasClass("kids") || $(element).hasClass("open")) {
+    	var folder = $(element).closest("li");
+    	$(folder).removeClass("tree-selected");
+    	// console.log('folder: ', folder);
+		// find the folder's concerned img 
+		var img = $(folder).children("div").children(".sort");
+		// console.log('img:', img);
+		$(folder).toggleClass("tree-open");
+
+		var loadMore = $(folder).children(".loadMore");
+		// console.log('load: ', loadMore);
+		// // console.log('counter2: ', counter2);
+		if ( !$(element).hasClass("kids") || $(folder).hasClass("tree-open")) {
 			// all kids not shown 
-			console.log	('xxxx');  
 	    	$(loadMore).toggle();
 	    	$(img).toggle();
-
 	    	// console.log(element);
 	    }
-		var ul = folder.children[1];
-		// console.log('id', $('#'+ul_id).children() );
+		var ul = $(folder).children("ul");
 
-		var size_li = $(ul).children("li").size();
-
-		if ( !$(element).hasClass("open") ) {	    	
+		if ( !$(folder).hasClass("tree-open") ) {	    	
 	    	// not expanded
-	    	console.log('close');
-	   		// set display of all children to none
-	   		$(ul).children("li").css( "display", "none");
+	    	console.log('close: ');
 	   		// if this current folder has more sub branches then close them
-	   		var branches = $(ul).children(".tree-branch");
-	   		
-	   		for (var i = 0; i < branches.length; i++) {
-			  	if ( $(branches[i]).hasClass("tree-open") && !$(branches[i].children[1]).hasClass("hidden")  ) {
+	   		var sub_folders = $(ul).children(".tree-branch");	   		
+	   		for (var i = 0; i < sub_folders.length; i++) {
+			  	if ( $(sub_folders[i]).hasClass("tree-open") && !$(sub_folders[i]).children("ul").hasClass("hidden")  ) {
 			  		// if the branch was opened previously then show only first 3 children
-			  		console.log('xxxx');
-			  		$(branches[i]).removeClass("tree-open");
-			  		// aria-expanded = false; 
-			  		// $(branches[i]).toggleClass("tree-selected");			  		
-			  		$(branches[i]).attr('aria-expanded', 'false');
-			  		$(branches[i].children[0]).children('.sort').toggle();
-			  		$(branches[i].children[2]).toggle();
-			  		$(branches[i].children[1]).addClass("hidden");
-			  		$(branches[i].children[0].children[0].children[1]).removeClass('glyphicon-folder-open'); 
-			  		$(branches[i].children[0].children[0].children[1]).addClass('glyphicon-folder-close');
+			  		$(sub_folders[i]).children("div").children(".sort").toggle();
+			  		$(sub_folders[i]).children(".loadMore").css("display", "none");
+			  		$(sub_folders[i]).children("ul").children("li").css( "display", "none");
+			  		$('#myTree').tree('closeFolder', $(sub_folders[i]).children("div") );			  		
 			  	}		  	
 			}
-
+	   		$(ul).children("li .tree-item").css( "display", "none");
 	   		$(element).toggleClass("kids"); 
-	   		// $('#myTree').tree('closeFolder', $(folder))
+	   		$(img).css( "display", "none");
 		    $(loadMore).css( "display", "none");
 	    } else {
-	    	console.log('open');  
+	    	console.log('open: ');
+
+			var size_li = $(ul).children("li").size();  
 		    var x = 3;
+		    // if children has class hidden then remove it 
+
+		    // if ( $(ul).hasClass("hidden") {
+		    // 	$(ul).removeClass("hidden");
+		    // }
 		    $(ul).children(" li:lt("+x+")").css( "display", "block");
-		    $(ul).attr('class', 'tree-branch-children');
+		    // $(ul).attr('class', 'tree-branch-children');
 
 		    $(loadMore).click(function () {	 
 		    	var count_kids = 0; 
@@ -97,11 +91,10 @@ $(document).ready(function() {
     });
 		
 
-    $('.sort').click(function () {	    	
-    	var element = this;
+    $('.sort').click(function () {	 
 
     	// get ul children of branch
-		var folder = $(element).closest("li")[0];
+		var folder = $(this).closest("li")[0];
 
 		var img = folder.children[0].children[1];
 		if ( $(img).hasClass("fa fa-sort-alpha-asc") ) 
