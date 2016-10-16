@@ -3,7 +3,6 @@ $(document).ready(function() {
 	$('#myTree').tree();
 	// console.log($('.tree-branch-name'));
 	$('.tree-branch-name').click(function () {	    	
-    	console.log('toggle');
     	var element = this;
 
     	var folder = $(element).closest("li");
@@ -27,30 +26,25 @@ $(document).ready(function() {
 
 		if ( !$(folder).hasClass("tree-open") ) {	    	
 	    	// not expanded
-	    	console.log('close: ');
 	    	close_subFolders($(ul).children(".tree-branch"));
 	   		
-	   		$(ul).children("li .tree-item").css( "display", "none");
+	   		$(ul).children("li").css( "display", "none");
 	   		$(element).toggleClass("kids"); 
 	   		$(img).css( "display", "none");
 		    $(loadMore).css( "display", "none");
 	    } else {
-	    	console.log('open: ');
 
-			var size_li = $(ul).children("li").size();  
-		    var x = 3;
-		    // if children has class hidden then remove it 
+    		var size_li = $(ul).children("li").size();  
+    		var x = 3;
 
-		    // if ( $(ul).hasClass("hidden") {
-		    // 	$(ul).removeClass("hidden");
-		    // }
-		    $(ul).children(" li:lt("+x+")").css( "display", "block");
-		    // $(ul).attr('class', 'tree-branch-children');
+		    $(ul).children(" li:lt(3)").css( "display", "block");
 
-		    $(loadMore).click(function () {	 
+			$(loadMore).click(function () {	
 		    	var count_kids = 0; 
+		    	console.log('x1: ', x);
+
 		        x = (x+3 <= size_li) ? x+3 : size_li;
-		        // console.log('x: ', x);
+		        console.log('x2: ', x);
 		        $(ul).children(" li:lt("+x+")").css( "display", "block");
 		        var children = $(ul).children("li");
 
@@ -63,13 +57,13 @@ $(document).ready(function() {
 				  		count_kids++;
 				  	}
 				}
-				console.log('count_kids', count_kids);
 		        if (count_kids == size_li)
 		        {
 		        	//console.log('please stahp');
 		        	$(loadMore).css( "display", "none");
 		        	$(element).toggleClass("kids"); 
 		        	count_kids = 0;
+		        	x = 3;
 		        }	      
 		    	
 		    	if ( $(img).hasClass("fa fa-sort-alpha-desc") ) 
@@ -77,8 +71,9 @@ $(document).ready(function() {
 		    		$(img).attr('class', "fa fa-sort-alpha-asc");
 		    	}
 		    });
+ 	    }
 
-	    }
+
     });
 		
 
@@ -180,7 +175,7 @@ function close_subFolders(sub_folders)
 	for (var i = 0; i < sub_folders.length; i++) {
 	  	if ( $(sub_folders[i]).hasClass("tree-open") && !$(sub_folders[i]).children("ul").hasClass("hidden")  ) {
 	  		// if the branch was opened previously then show only first 3 children
-	  		$(sub_folders[i]).children("div").children(".sort").toggle();
+	  		$(sub_folders[i]).children("div").children(".sort").css("display", "none");
 	  		$(sub_folders[i]).children(".loadMore").css("display", "none");
 	  		$(sub_folders[i]).children("ul").children("li").css( "display", "none");
 	  		$('#myTree').tree('closeFolder', $(sub_folders[i]).children("div") );
