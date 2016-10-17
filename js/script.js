@@ -9,7 +9,7 @@ $(document).ready(function() {
     	$(folder).removeClass("tree-selected");
     	// console.log('folder: ', folder);
 		// find the folder's concerned img 
-		var img = $(folder).children("div").children(".sort");
+		var img = $(folder).children("div").children(".fa");
 		// console.log('img:', img);
 		$(folder).toggleClass("tree-open");
 
@@ -18,8 +18,8 @@ $(document).ready(function() {
 		// // console.log('counter2: ', counter2);
 		if ( !$(element).hasClass("kids") || $(folder).hasClass("tree-open")) {
 			// all kids not shown 
-	    	$(loadMore).toggle();
-	    	$(img).toggle();
+	    	$(loadMore).css( "display", "block");
+	    	$(img).css( "display", "inline");
 	    	// console.log(element);
 	    }
 		var ul = $(folder).children("ul");
@@ -30,6 +30,7 @@ $(document).ready(function() {
 	   		
 	   		$(ul).children("li").css( "display", "none");
 	   		$(element).toggleClass("kids"); 
+	   		// console.log('img: ', img);
 	   		$(img).css( "display", "none");
 		    $(loadMore).css( "display", "none");
 	    } else {
@@ -41,10 +42,10 @@ $(document).ready(function() {
 
 			$(loadMore).click(function () {	
 		    	var count_kids = 0; 
-		    	console.log('x1: ', x);
+		    	// console.log('x1: ', x);
 
 		        x = (x+3 <= size_li) ? x+3 : size_li;
-		        console.log('x2: ', x);
+		        // console.log('x2: ', x);
 		        $(ul).children(" li:lt("+x+")").css( "display", "block");
 		        var children = $(ul).children("li");
 
@@ -179,8 +180,12 @@ function close_subFolders(sub_folders)
 	  		$(sub_folders[i]).children(".loadMore").css("display", "none");
 	  		$(sub_folders[i]).children("ul").children("li").css( "display", "none");
 	  		$('#myTree').tree('closeFolder', $(sub_folders[i]).children("div") );
-	  		// check further
-	  		close_subFolders( $(sub_folders[i]).children("ul").children("li .tree-branch") );			  		
+
+	  		// check further for branch trees
+	  		if ($(sub_folders[i]).children("ul").children("li").hasClass('tree-branch') ) {
+	  			// console.log('hallelujah, PRAISE THE LORD!');
+	  			close_subFolders( $(sub_folders[i]).children("ul").children("li .tree-branch") ); 
+	  		}
 	  	}		  	
 	}
 }
