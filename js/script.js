@@ -1,7 +1,24 @@
 $(document).ready(function() {
     // tree = $('#myTree').clone();
 	$('#myTree').tree();
-	// console.log($('.tree-branch-name'));
+	// console.log('drag: ',  $( ".tree-branch").children("ul").children("li") );
+    $( ".tree-branch").children("ul").children("li").draggable({
+    	cancel : "",
+    	revert :  function (event, ui) {
+    		// if ui is being dragged and dropped on a child then revert
+    		if (event !== false) 
+    		{
+    			// dragged onto a droppable
+    			console.log('event2: ', event[0]);
+    		}
+    		console.log('this: ', this[0] ); 
+    		// if not dropped on a draggable class element then revert. 
+    		return event !== false ? false : true;
+    	}
+    });
+    // console.log( $( ".tree-branch").children().children("button .tree-branch-name") );
+    $( ".tree-branch").droppable();
+
 	$('.tree-branch-name').click(function () {	    	
     	var element = this;
 
@@ -74,10 +91,8 @@ $(document).ready(function() {
 		    });
  	    }
 
-
-    });
+	});
 		
-
     $('.sort').click(function () {	 
 
     	// get ul children of branch
