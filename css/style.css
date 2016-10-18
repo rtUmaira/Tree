@@ -1,7 +1,18 @@
+.container{
+	margin-top: 2cm;
+}
+
+
 .tree-branch-children li, .fa.fa-sort-alpha-asc, .loadMore, .sort {
 	display: none;
 }
 
-li {
-	width: 6%;
+.form-group li {
+	max-width: 300px;
 }
+
+i {
+	height: 20px;
+	width: 20px;
+}
+
