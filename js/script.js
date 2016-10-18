@@ -87,7 +87,7 @@ function toggle(element)
 	if ( !$(folder).hasClass("tree-open") ) {	    	
     	// not expanded
     	// console.log('close folder: ', folder);
-    	close_subFolders($(ul).children(".tree-branch"));
+		close_subFolders($(ul).children(".tree-branch"));
    		$(ul).children("li").css( "display", "none");
    		$(element).toggleClass("kids"); 
    		// console.log('img2: ', img);
@@ -240,7 +240,7 @@ function append(child, parent)
  		// if child was an item then make it a folder
 	 	var div =  $("<div>", {"class": "tree-branch-header"});
 	 	$($(_child).children("button").children("span")[0]).attr('class', "glyphicon icon-caret glyphicon-play");
-	 	var span = $("<span>", {"class": "glyphicon icon-folder glyphicon-folder-open"});
+	 	var span = $("<span>", {"class": "glyphicon icon-folder glyphicon-folder-close"});
 	 	$(span).insertBefore( $(_child).children("button").children("span")[1] );
 	 	$(_child).children("button").attr('class', "tree-branch-name");
 	 	var i = $("<i>", {"class": "fa fa-sort-alpha-asc sort", 'aria-hidden': "true"});
@@ -250,7 +250,7 @@ function append(child, parent)
 		$(_child).children().remove();
 
 
-	 	$(_child).attr('class', "tree-branch tree-open tree-selected");
+	 	$(_child).attr('class', "tree-branch");
 	 	$(_child).attr('aria-expanded', "true");
 
 	 	var ul = $("<ul>", {"class": "tree-branch-children", role: "group"});
@@ -263,6 +263,13 @@ function append(child, parent)
  	$(_child).prependTo( $(parent).parent()[0] );
  	$(_child).children("ul").prepend(parent);
 
- 	toggle(_child);
- 	sort(_child);
+ 	$( $(_child).children("div").children(".tree-branch-name") ).click(function () {	 
+    	//console.log('this: ', this);   	
+    	toggle(this);
+	});
+	 $( $(_child).children("div").children(".sort") ).click(function () {	 
+    	//console.log('this: ', this);   	
+    	sort(this);
+	})
+
 }
