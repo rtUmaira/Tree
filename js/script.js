@@ -4,37 +4,30 @@ $(document).ready(function() {
 	// console.log('drag: ',  $( ".tree-branch").children("ul").children("li") );
     $( ".tree-branch").children("ul").children("li").draggable({
     	cancel : "",
-    	revert :  function (event, ui) {
-    		// if ui is being dragged and dropped on a child then revert
-    		if (event !== false) 
-    		{
-    			// dragged onto a droppable
-    			//console.log(this[0], event[0]);
-    			console.log('length: ', $( this[0]).find(event[0]).length );
-
-    			if ( $( this[0]).find(event[0]).length > 0 ) 
-    			{
-    				// this is the ancestor of event[0]
-    				console.log('no!');
-    				return true; 
-    			} else if ( $( this[0]).find(event[0]).length == 0 ) {
-    				append(this[0], event[0]);
-    				console.log('yes!');
-    				return false;
-    			}
-    		}
-    		// console.log(event);
-    		// if not dropped on a draggable class element then revert. 
+    	revert :  function (event, ui) {  
+    		// if event not a droppable event then revert
     		return event !== false ? false : true;
+    	}     	
+    });
+
+   	$( ".tree-branch").children("div .tree-branch-header").droppable({
+    	drop :  function (event, ui) {
+    		console.log('in tree item');
+    		drop(event, ui, this);
     	}
     });
-    // console.log( $( ".tree-branch").children().children("button .tree-branch-name") );
-    $( ".tree-branch").droppable();
+    $( ".tree-item").droppable({
+    	drop :  function (event, ui) {
+    		console.log('in tree branch');
+    		drop(event, ui, this);
+    	}
+    });
     $('.tree-branch-name').click(function () {	 
     	//console.log('this: ', this);   	
     	toggle(this);
 	});
-	 $('.sort').click(function () {	 
+
+	$('.sort').click(function () {	 
     	//console.log('this: ', this);   	
     	sort(this);
 	})
@@ -68,7 +61,7 @@ function toggle(element)
 	$(folder).removeClass("tree-selected");
 	// find the folder's concerned img 
 	var img = $(folder).children("div").children(".fa");
-	console.log('toggle');
+	// console.log('toggle');
 	$(folder).toggleClass("tree-open");
 
 	var loadMore = $(folder).children(".loadMore");
@@ -272,4 +265,43 @@ function append(child, parent)
     	sort(this);
 	})
 
+}
+
+
+function drop(event, ui, element)
+{
+	// if ui is being dragged and dropped on a child then revert
+	// dragged onto a droppable
+	var draggable = ui.draggable;
+	var droppable = element;
+	// console.log('draggable: ', draggable);
+	// console.log('droppable: ', droppable);
+	$.fn.isAfter = function(sel) {
+	    return this.prevAll(sel).length !== 0;
+	}
+	$.fn.isBefore = function(sel) {
+	    return this.nextAll(sel).length !== 0;
+	}
+
+	// console.log('length: ', $( this[0]).find(event[0]).length );
+	if ( $(draggable).find(droppable).length == 0 ) {
+		// if a sibling then rearrage on top do not append 
+		if( $(draggable).is( $(droppable).siblings() )  )
+		{
+			console.log('yes1!');
+
+			if ( $(draggable).isAfter(droppable) ) {
+		        $(draggable).after($(droppable));
+		    } else if ( $(draggable).isBefore(droppable) ) {
+		    	$(draggable).before($(droppable));
+		    }
+			$(draggable).removeAttr('style');
+ 			$(draggable).css( "display", "block"); 
+
+		} else
+		{
+			console.log('yes2!');
+			append(draggable, droppable);
+		}
+	}
 }
