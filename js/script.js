@@ -1,27 +1,7 @@
 $(document).ready(function() {
-    // tree = $('#myTree').clone();
-	$('#myTree').tree();
-	// console.log('drag: ',  $( ".tree-branch").children("ul").children("li") );
-    $( ".tree-branch").children("ul").children("li").draggable({
-    	cancel : "",
-    	revert :  function (event, ui) {  
-    		// if event not a droppable event then revert
-    		return event !== false ? false : true;
-    	}     	
-    });
 
-   	$( ".tree-branch").children("div .tree-branch-header").droppable({
-    	drop :  function (event, ui) {
-    		console.log('in tree item');
-    		drop(event, ui, this);
-    	}
-    });
-    $( ".tree-item").droppable({
-    	drop :  function (event, ui) {
-    		console.log('in tree branch');
-    		drop(event, ui, this);
-    	}
-    });
+	$('#myTree').tree();
+
     $('.tree-branch-name').click(function () {	 
     	//console.log('this: ', this);   	
     	toggle(this);
@@ -30,7 +10,32 @@ $(document).ready(function() {
 	$('.sort').click(function () {	 
     	//console.log('this: ', this);   	
     	sort(this);
-	})
+	});
+
+	$(".tree-branch").children("div .tree-branch-header").droppable({
+    	drop :  function (event, ui) {
+    		// console.log('ui: ', ui.draggable[0]);
+    		// console.log('this: ', this);
+    		drop(event, ui, this);
+    	}
+    });
+
+   	$(".tree-item").droppable({
+    	drop :  function (event, ui) {
+    		// console.log('ui: ', ui.draggable[0]);
+    		// console.log('this: ', this);
+    		drop(event, ui, this);
+    	}
+    });
+    
+	$(".draggable").draggable({
+    	cancel : "",
+    	revert :  function (event, ui) {  
+    		// if event not a droppable event then revert
+    		// console.log('event: ', event);
+    		return event !== false ? false : true;
+    	}     	
+    });
 
 });
 
@@ -57,6 +62,7 @@ function close_subFolders(sub_folders)
 
 function toggle(element) 
 {
+	// console.log('toggle');
 	var folder = $(element).closest("li");
 	$(folder).removeClass("tree-selected");
 	// find the folder's concerned img 
@@ -79,7 +85,7 @@ function toggle(element)
 
 	if ( !$(folder).hasClass("tree-open") ) {	    	
     	// not expanded
-    	// console.log('close folder: ', folder);
+    	// console.log('close folder: ', $(ul).children("li") );
 		close_subFolders($(ul).children(".tree-branch"));
    		$(ul).children("li").css( "display", "none");
    		$(element).toggleClass("kids"); 
@@ -132,6 +138,7 @@ function toggle(element)
 
 function sort(element)
 {
+	// console.log('sort');
 	// get ul children of branch
 	var folder = $(element).closest("li")[0];
 
@@ -232,28 +239,30 @@ function append(child, parent)
  	if ( $(child).hasClass ("tree-item")) {
  		// if child was an item then make it a folder
 	 	var div =  $("<div>", {"class": "tree-branch-header"});
-	 	$($(_child).children("button").children("span")[0]).attr('class', "glyphicon icon-caret glyphicon-play");
+	 	$( $(_child).children("button").children("span")[0] ).attr('class', "glyphicon icon-caret glyphicon-play");
 	 	var span = $("<span>", {"class": "glyphicon icon-folder glyphicon-folder-close"});
 	 	$(span).insertBefore( $(_child).children("button").children("span")[1] );
 	 	$(_child).children("button").attr('class', "tree-branch-name");
 	 	var i = $("<i>", {"class": "fa fa-sort-alpha-asc sort", 'aria-hidden': "true"});
 
 		$(div).append($(_child).children("button"));
-		$(div).append(i);
+		// $(div).append(i);
 		$(_child).children().remove();
 
 
 	 	$(_child).attr('class', "tree-branch");
 	 	$(_child).attr('aria-expanded', "true");
 
-	 	var ul = $("<ul>", {"class": "tree-branch-children", role: "group"});
+	 	var ul = $("<ul>", {"class": "tree-branch-children hidden", role: "group"});
 	 	$(_child).append(div);
 	 	$(_child).append(ul);
+	 	// load more div also needs to be created and appended
 
-	 	// console.log('child: ', child);
  	} 
+ 	// console.log('parent: ', $(parent).parent());
+ 	// console.log('child: ', _child);
 
- 	$(_child).prependTo( $(parent).parent()[0] );
+ 	$(_child).prependTo( $(parent).parent() );
  	$(_child).children("ul").prepend(parent);
 
  	$( $(_child).children("div").children(".tree-branch-name") ).click(function () {	 
@@ -267,41 +276,72 @@ function append(child, parent)
 
 }
 
-
 function drop(event, ui, element)
 {
-	// if ui is being dragged and dropped on a child then revert
-	// dragged onto a droppable
 	var draggable = ui.draggable;
 	var droppable = element;
-	// console.log('draggable: ', draggable);
-	// console.log('droppable: ', droppable);
+
 	$.fn.isAfter = function(sel) {
 	    return this.prevAll(sel).length !== 0;
 	}
 	$.fn.isBefore = function(sel) {
 	    return this.nextAll(sel).length !== 0;
 	}
+	var parent;
+	if ($(droppable).hasClass('tree-branch-header')) 
+	{
+		parent = $(droppable).parent("li");
+	}
 
-	// console.log('length: ', $( this[0]).find(event[0]).length );
-	if ( $(draggable).find(droppable).length == 0 ) {
-		// if a sibling then rearrage on top do not append 
-		if( $(draggable).is( $(droppable).siblings() )  )
+	// console.log('parent: ', parent);
+	// console.log('sibling1: ', $(draggable).is( $(droppable).siblings()) );
+	// console.log('sibling2: ', $(draggable).is( $(parent).siblings()) );
+
+
+	if( $(draggable).is($(droppable).siblings()) || $(draggable).is($(parent).siblings())   ) {
+		// if a sibling then switch places 
+		if ($(droppable).hasClass('tree-branch-header')) 
 		{
-			console.log('yes1!');
+			// console.log('yes11!');
+			if ( $(draggable).isAfter(parent) ) {
+		        $(draggable).after($(parent));
+		    } else if ( $(draggable).isBefore(parent) ) {
+		    	$(draggable).before($(parent));
+		    }
+			$(draggable).removeAttr('style');
+			$(draggable).css( "display", "block"); 
 
+
+		} else if ( $(droppable).hasClass('tree-item') ) {
+
+			// console.log('yes12!');
 			if ( $(draggable).isAfter(droppable) ) {
 		        $(draggable).after($(droppable));
 		    } else if ( $(draggable).isBefore(droppable) ) {
 		    	$(draggable).before($(droppable));
 		    }
 			$(draggable).removeAttr('style');
- 			$(draggable).css( "display", "block"); 
+			$(draggable).css( "display", "block"); 			
+		} 		
+	}
 
-		} else
-		{
+	if ($(droppable).hasClass('tree-branch-header')) {
+
+		if ( $(parent).find(draggable).length > 0 ) {
+			// if draggable is a sub child of droppable
+			append(draggable, parent);
+		}
+	} else if ( $(droppable).hasClass('tree-item') && !$(draggable).is($(droppable).siblings()) ) {
+
+		if ( $(droppable).find(draggable).length > 0 ) {
+			// if draggable is a sub child of droppable
 			console.log('yes2!');
 			append(draggable, droppable);
 		}
-	}
+	} 
+
+	console.log('draggable: ', draggable);
+	// console.log('droppable: ', droppable);
+
+	// console.log('-----------------');
 }
