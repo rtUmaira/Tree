@@ -16,3 +16,12 @@ i {
 	width: 20px;
 }
 
+
+.tree-branch-header {
+	background-color: yellow;
+}
+
+
+.draggable {
+	background-color: green;
+}
